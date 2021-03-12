@@ -1,0 +1,19 @@
+{
+    "output": {
+        "EN": {
+            "text": [
+                "Sorry, but I did not understand your question. Please try to rephrase it. "
+            ],
+            "voice": "Sorry, but I did not understand your question. Please try to rephrase it. ",
+            "voiceonly": "Sorry, but I did not understand your question. Please try to rephrase it."
+        }
+    },
+    "servedBy": "%APPLICATION_ID%",
+    "statusCode": "4J",
+    "responseStatus": 4,
+    "applicationStatus": "4J",
+    "decisionStatus": 9,
+    "Action": "unSupported",
+    "messageId": "",
+    "applicationId": "%APPLICATION_ID%"
+}

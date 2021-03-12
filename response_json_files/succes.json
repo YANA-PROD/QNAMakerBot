@@ -1,0 +1,30 @@
+{
+    "output": {
+        "EN": {
+            "text": ["%OUTPUT_TEXT%"],
+            "voice": "%OUTPUT_TEXT%",
+            "voiceonly": ""
+        },
+        "CTX_RES_COUNT": 1
+    },
+    "applicationId": "%APPLICATION_ID%",
+    "action": "KBResponse",
+    "responseStatus": 0,
+    "applicationStatus": "00",
+    "decisionStatus": 0,
+    "results": {
+        "objType": "non",
+        "objects": [{
+                "CTX_RES_ENTITY_NAME": "",
+                "CTX_RES_KEYWORD": "",
+                "CTX_RES_INTENT": "",
+                "CTX_RES_TEXT": "%OUTPUT_TEXT%",
+                "CTX_RES_VOICE": "%OUTPUT_TEXT%",
+                "CTX_RES_VOICE_ONLY": "%OUTPUT_TEXT%"
+            }
+        ]
+    },
+    "responseCategory": "Success",
+    "statusCode": "0",
+    "servedBy": "%APPLICATION_ID%"
+}
