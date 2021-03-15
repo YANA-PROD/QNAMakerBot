@@ -15,12 +15,12 @@
     "results": {
         "objType": "non",
         "objects": [{
-                "CTX_RES_ENTITY_NAME": "",
+                "CTX_RES_ENTITY_NAME": "TEST",
                 "CTX_RES_KEYWORD": "",
-                "CTX_RES_INTENT": "",
+                "CTX_RES_INTENT": "TEST",
                 "CTX_RES_TEXT": "%OUTPUT_TEXT%",
                 "CTX_RES_VOICE": "%OUTPUT_TEXT%",
-                "CTX_RES_VOICE_ONLY": "%OUTPUT_TEXT%"
+                "CTX_RES_VOICE_ONLY": ""
             }
         ]
     },

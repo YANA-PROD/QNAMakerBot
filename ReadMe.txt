@@ -1,5 +1,5 @@
 Version 1.0.0.0
-Comments: Not which connects to QNA maker server and gets answer.
+Comments: Bot which connects to QNA maker server and gets answer.
             If Answer score is greater than or equal to configured score value.
             we will return succes response else we will return error reponse.
             We have two JSON files one for success and one for error.

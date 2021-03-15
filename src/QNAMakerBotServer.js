@@ -43,11 +43,11 @@ app.listen(PORT, IP, () => {
 
 //Environment variables setting for running it on local
 
-process.env.KB_SEARCH_URL = 'https://yana-qna.azurewebsites.net/qnamaker/knowledgebases/dec776bc-9f53-4828-b8ff-2c44627727a7/generateAnswer';
+/*process.env.KB_SEARCH_URL = 'https://yana-qna.azurewebsites.net/qnamaker/knowledgebases/dec776bc-9f53-4828-b8ff-2c44627727a7/generateAnswer';
 process.env.YANA_DEFAULT_TIMEOUT = '5000';
 process.env.KB_AUTHORIZATION = 'EndpointKey ed438af1-b6ec-47fb-b2f4-1ec803c53808';
 process.env.ENVIRONMENT_NAME = 'QNAMakerBot'
-process.env.KB_SEARCH_MIN_SCORE = 70;
+process.env.KB_SEARCH_MIN_SCORE = 70;*/
 
 //Make a call to QNA maker using environment variables.
 // It takes input JSON text property.
@@ -103,7 +103,7 @@ function getResponse(KBResponseText, input) {
 
     if(KBResponseText) {
         botJSONResponse = successJson;
-        botJSONResponse.output.EN.text = KBResponseText;
+        botJSONResponse.output.EN.text[0] = KBResponseText;
         botJSONResponse.output.EN.voice = KBResponseText;
         botJSONResponse.results.objects[0].CTX_RES_TEXT = KBResponseText;
         botJSONResponse.results.objects[0].CTX_RES_VOICE = KBResponseText;
@@ -118,6 +118,7 @@ function getResponse(KBResponseText, input) {
     botJSONResponse.languageCode = input.languageCode;
     botJSONResponse.userId = input.userId;
     botJSONResponse.input = { 'text': input.text };
+    botJSONResponse.context = input.context;
 
     console.log("returning response as::" + botJSONResponse);
     return botJSONResponse;
