@@ -18,13 +18,13 @@ app.use(express.json())
 app.post('/', async (req, res) => {
  console.log("request body::" + JSON.stringify(req.body));
  input = req.body;
- let KBResponseText = "";
+ let KBResponseObj = "";
  if(input)
-    KBResponseText = await getKBSearchResult(input.text);
+    KBResponseObj = await getKBSearchResult(input.text);
  
- console.log("KBResponseText::" + KBResponseText);
+ console.log("KBResponseText::" + JSON.stringify(KBResponseObj));
 
- let responseJSON = await getResponse(KBResponseText, input);
+ let responseJSON = await getResponse(KBResponseObj, input);
  console.log("response JSON::" + JSON.stringify(responseJSON));
 
  res.send(responseJSON);
@@ -62,6 +62,7 @@ async function getKBSearchResult(inputText) {
     const contentType = 'application/json';
 
 	try {
+        var responseObj = {};
         var responseText = '';
         const response = await fetch(process.env.KB_SEARCH_URL, {method:methodType, 
             body:JSON.stringify({question:inputText}), 
@@ -84,6 +85,8 @@ async function getKBSearchResult(inputText) {
 
             if(score in firstResponse && firstResponse[score] && firstResponse[score] >= process.env.KB_SEARCH_MIN_SCORE) {
                 responseText = firstResponse[answer]
+                responseObj.text = responseText;
+                responseObj.source = firstResponse["source"];
             }
         }
     } catch(e) {
@@ -92,21 +95,22 @@ async function getKBSearchResult(inputText) {
     }
     
     console.log("responseText::" + responseText);
-    return responseText;
+    return responseObj;
 }
 
-function getResponse(KBResponseText, input) {
-    console.log("Inside getResonse method" + KBResponseText);
+function getResponse(KBResponseObj, input) {
+    console.log("Inside getResonse method" + KBResponseObj);
     let botJSONResponse;
 
     const applicationId= process.env.ENVIRONMENT_NAME
 
-    if(KBResponseText) {
+    if(KBResponseObj && KBResponseObj.text) {
         botJSONResponse = successJson;
-        botJSONResponse.output.EN.text[0] = KBResponseText;
-        botJSONResponse.output.EN.voice = KBResponseText;
-        botJSONResponse.results.objects[0].CTX_RES_TEXT = KBResponseText;
-        botJSONResponse.results.objects[0].CTX_RES_VOICE = KBResponseText;
+        botJSONResponse.output.EN.text[0] = KBResponseObj.text;
+        botJSONResponse.output.EN.voice = KBResponseObj.text;
+        botJSONResponse.results.objects[0].CTX_RES_TEXT = KBResponseObj.text;
+        botJSONResponse.results.objects[0].CTX_RES_VOICE = KBResponseObj.text;
+        botJSONResponse.results.objects[0].CTX_RES_REF_URL = KBResponseObj.source;
     }
     else {
         botJSONResponse = errorJson;
@@ -119,6 +123,7 @@ function getResponse(KBResponseText, input) {
     botJSONResponse.userId = input.userId;
     botJSONResponse.input = { 'text': input.text };
     botJSONResponse.context = input.context;
+    botJSONResponse.MessageId = input.MessageId;
 
     console.log("returning response as::" + botJSONResponse);
     return botJSONResponse;

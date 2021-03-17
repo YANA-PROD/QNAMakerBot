@@ -20,7 +20,8 @@
                 "CTX_RES_INTENT": "TEST",
                 "CTX_RES_TEXT": "%OUTPUT_TEXT%",
                 "CTX_RES_VOICE": "%OUTPUT_TEXT%",
-                "CTX_RES_VOICE_ONLY": ""
+                "CTX_RES_VOICE_ONLY": "",
+                "CTX_RES_REF_URL": ""
             }
         ]
     },

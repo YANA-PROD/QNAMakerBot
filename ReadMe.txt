@@ -1,3 +1,6 @@
+Version 1.0.0.1
+Added message id and ref_url in the response .
+
 Version 1.0.0.0
 Comments: Bot which connects to QNA maker server and gets answer.
             If Answer score is greater than or equal to configured score value.
