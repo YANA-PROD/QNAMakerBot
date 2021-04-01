@@ -47,7 +47,9 @@ app.listen(PORT, IP, () => {
 process.env.YANA_DEFAULT_TIMEOUT = '5000';
 process.env.KB_AUTHORIZATION = 'EndpointKey ed438af1-b6ec-47fb-b2f4-1ec803c53808';
 process.env.ENVIRONMENT_NAME = 'QNAMakerBot'
-process.env.KB_SEARCH_MIN_SCORE = 70;*/
+process.env.KB_SEARCH_MIN_SCORE = 70;
+process.env.IS_TEST = false;
+process.env.SITE_URL = 'https://hr.virginia.edu/';*/
 
 //Make a call to QNA maker using environment variables.
 // It takes input JSON text property.
@@ -64,8 +66,15 @@ async function getKBSearchResult(inputText) {
 	try {
         var responseObj = {};
         var responseText = '';
+        var body = {question:inputText}
+        // If is test is enabled we will look in the test mode of QNA maker
+        // Else we will look into publish mode of QNA maker
+        if (process.env.IS_TEST && process.env.IS_TEST == 'true'){
+                body.isTest = true;
+        }
+        
         const response = await fetch(process.env.KB_SEARCH_URL, {method:methodType, 
-            body:JSON.stringify({question:inputText}), 
+            body:JSON.stringify(body), 
             timeout: process.env.YANA_DEFAULT_TIMEOUT, 
             headers: {
                 'Authorization': process.env.KB_AUTHORIZATION,
@@ -110,7 +119,16 @@ function getResponse(KBResponseObj, input) {
         botJSONResponse.output.EN.voice = KBResponseObj.text;
         botJSONResponse.results.objects[0].CTX_RES_TEXT = KBResponseObj.text;
         botJSONResponse.results.objects[0].CTX_RES_VOICE = KBResponseObj.text;
-        botJSONResponse.results.objects[0].CTX_RES_REF_URL = KBResponseObj.source;
+        // If response source is not a URL eg: it could be editorial
+        // We will add google link as the reference URL
+        // Else we will take source URL as the reference URL
+        if(KBResponseObj.source && validURL(KBResponseObj.source)) {
+            botJSONResponse.results.objects[0].CTX_RES_REF_URL = KBResponseObj.source;
+        }
+        else {
+            botJSONResponse.results.objects[0].CTX_RES_REF_URL = 'https://www.google.com/search?q=site:' +
+                process.env.SITE_URL + input.text
+        }
     }
     else {
         botJSONResponse = errorJson;
@@ -128,3 +146,13 @@ function getResponse(KBResponseObj, input) {
     console.log("returning response as::" + botJSONResponse);
     return botJSONResponse;
 }
+
+function validURL(str) {
+    var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+      '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!pattern.test(str);
+  }
