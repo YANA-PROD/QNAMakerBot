@@ -48,8 +48,8 @@ process.env.YANA_DEFAULT_TIMEOUT = '5000';
 process.env.KB_AUTHORIZATION = 'EndpointKey ed438af1-b6ec-47fb-b2f4-1ec803c53808';
 process.env.ENVIRONMENT_NAME = 'QNAMakerBot'
 process.env.KB_SEARCH_MIN_SCORE = 70;
-process.env.IS_TEST = false;
-process.env.SITE_URL = 'https://hr.virginia.edu/';*/
+process.env.IS_TEST;
+process.env.SITE_URL = '';*/
 
 //Make a call to QNA maker using environment variables.
 // It takes input JSON text property.
@@ -126,8 +126,15 @@ function getResponse(KBResponseObj, input) {
             botJSONResponse.results.objects[0].CTX_RES_REF_URL = KBResponseObj.source;
         }
         else {
-            botJSONResponse.results.objects[0].CTX_RES_REF_URL = 'https://www.google.com/search?q=site:' +
-                process.env.SITE_URL + input.text
+            if (process.env.SITE_URL){
+                botJSONResponse.results.objects[0].CTX_RES_REF_URL = 'https://www.google.com/search?q=site:' +
+                    process.env.SITE_URL + input.text
+            }
+            else{
+                botJSONResponse.results.objects[0].CTX_RES_REF_URL = 'https://www.google.com/search?q=' +
+                   input.text
+            }
+                
         }
     }
     else {
